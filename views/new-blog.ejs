@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+
+<%- include('./partials/header.ejs') %>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
+<body>
+    <main>
+        <div class="container">
+
+            <%- include('./partials/nav.ejs') %>
+            <div class="item second-item">
+                <h1>Add new blog</h1>
+                <% if (Object.keys(errors).length) { %>
+                <div class="alert alert-danger" role="alert">
+                    Please make sure you fill all fields
+                </div>
+
+                <% } %>
+                <% if (success !='' ) { %>
+                <div class="alert alert-success" role="alert">
+                    <%= success %> You can continue adding new blog or <a href="/all-blogs">click here</a> to see all blogs.
+                </div>
+
+                <% } %>
+
+
+                <form class="mt-2" action="/new-blog" method="POST">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Blog title</label>
+                        <input type="text" class="form-control <%= errors['title'] ? 'is-invalid' : '' %>  " name="title" id="title" value="<%= datas['title'] ? datas['title'] : '' %>">
+                        <% if (errors['title']) { %>
+                        <div class="invalid-feedback">
+                            <%= errors['title'] %>
+                        </div>
+
+                        <% } %>
+                    </div>
+                    <div class="mb-3">
+                        <label for="snip" class="form-label">Blog snippet</label>
+                        <input type="text" class="form-control <%= errors['snippet'] ? 'is-invalid' : '' %>  " name="snippet" id="snip" value="<%= datas['snippet'] ? datas['snippet'] : '' %>">
+                        <% if (errors['snippet']) { %>
+                        <div class="invalid-feedback">
+                            <%= errors['snippet'] %>
+                        </div>
+
+                        <% } %>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-group">
+                            <label for="my-textarea" class="form-label">Blog body</label>
+                            <textarea id="my-textarea" class="quilljs-textarea form-control <%= errors['body'] ? 'is-invalid' : '' %>  " name="body" rows="3"><%= datas['body'] ? datas['body'] : '' %></textarea>
+                            <% if (errors['body']) { %>
+                            <div class="invalid-feedback">
+                                <%= errors['body'] %>
+                            </div>
+
+                            <% } %>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </form>
+            </div>
+        </div>
+
+    </main>
+
+
+    <%- include('./partials/footer.ejs') %>
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <script>
+        function quilljs_textarea(selector = null, options = null) {
+            if (selector) {
+                var elements = Array.prototype.slice.call(document.querySelectorAll(selector));
+            } else {
+                var elements = Array.prototype.slice.call(document.querySelectorAll('[data-quilljs]'));
+            }
+            elements.forEach(function(el) {
+                if (selector && el.hasAttribute("data-quilljs")) {
+                    return;
+                }
+                var type = el.type;
+                if (type == 'textarea') {
+                    value = el.value;
+                    container = document.createElement('div');
+                    container.innerHTML = value;
+                    el.parentNode.insertBefore(container, el.nextSibling);
+                    el.style.display = "none";
+                    var placeholder = el.placeholder;
+                } else {
+                    var placeholder = null;
+                    container = el;
+                }
+                if (!options) {
+                    var defaults = {
+                        theme: 'snow',
+                        placeholder: placeholder,
+                    };
+                } else {
+                    if (!options.placeholder) {
+                        options.placeholder = placeholder;
+                    }
+                    var defaults = options;
+                }
+
+                var editor = new Quill(container, defaults);
+                editor.on('text-change', function() {
+                    var text = editor.root.innerHTML;
+                    el.value = text;
+                });
+            });
+        }
+        (function() {
+            quilljs_textarea();
+        })();
+
+
+
+        (function() {
+            quilljs_textarea('.quilljs-textarea', {
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic', 'underline'], // toggled buttons
+                        [{
+                            'list': 'ordered'
+                        }, {
+                            'list': 'bullet'
+                        }],
+                        [{
+                            'header': [1, 2, 3, 4, 5, 6, false]
+                        }],
+                        [{
+                            'color': []
+                        }, {
+                            'background': []
+                        }], // dropdown with defaults from theme
+                        [{
+                            'align': []
+                        }],
+                    ]
+                },
+                theme: 'snow',
+            });
+        })();
+
+
+        var errors = '<%- JSON.stringify(errors) %>';
+        errors = JSON.parse(errors)
+
+        if (errors['body']) {
+            let a = document.querySelector('.ql-toolbar')
+            let b = document.querySelector('.ql-container')
+            a.classList.add("form-control", "is-invalid");
+            b.classList.add("form-control", "is-invalid");
+
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+
+<%- include('./partials/header.ejs') %>
+
+    <body>
+        <main>
+            <div class="container">
+                <%- include('./partials/nav.ejs') %>
+            </div>
+            <section id="hero-animated" class="hero-animated d-flex align-items-center">
+                <div class="container d-flex flex-column justify-content-center align-items-center position-relative aos-init aos-animate" data-aos="zoom-out">
+                    <div class="row">
+                        <div class="col-7" style="margin-top: 8rem;">
+                            <h2 style="font-size:3.5rem">My first ExpressJs App</h2>
+                            <p style="font-size:1.5rem">Please check out the nav to see what Im trying...</p>
+
+                        </div>
+                        <div class="col-5">
+                            <img src="https://bootstrapmade.com/demo/templates/HeroBiz/assets/img/hero-carousel/hero-carousel-3.svg" class="img-fluid animated">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <%- include('./partials/footer.ejs') %>
+
+    </body>
+
+</html>

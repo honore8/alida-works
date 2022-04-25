@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/header.ejs') %>
+
+    <body>
+        <main>
+            <div class="container">
+                <%- include('./partials/nav.ejs') %>
+            </div>
+
+            <div class="container py-5" id="featured-3">
+                <div class="row d-flex justify-content-between border-bottom">
+                    <div class="col-3">
+                        <h2 class="pb-2">All Blogs (
+                            <%= blogs.length %> )</h2>
+                    </div>
+                    <div class="col-6">
+                        <form class="row align-items-center" action="/all-blogs" method="GET">
+                            <div class="col-10">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" onkeyup="this.value = this.value.trim()" name="search" value="<%= search !== undefined ? search : '' %>" placeholder="Search..." />
+                                </div>
+                            </div>
+                            <div class="col-2">
+                                <button type="submit" class="btn btn-success">Go</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-3">
+                        <a href="?filter=recent" class="btn btn-secondary">Filter by newest</a>
+                        <a href="?filter=oldest" class="btn btn-secondary float-end">Filter by oldest</a>
+                    </div>
+                </div>
+                <% if (msg !== undefined) { %>
+                    <div class="alert alert-success alert-dismissible fade show" role="alert" id="suc-delete">
+                        <%= msg %>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" onclick="removeAlert()"></button>
+                    </div>
+                    <% } %>
+                        <div class="row mt-2">
+                            <% if (blogs.length> 0) {%>
+                                <% blogs.forEach(blog=> { %>
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <h5 class="card-title">
+                                                    <%= blog.title %>
+                                                </h5>
+                                                <small style="font-size: 0.8em"><i>Post on: <%= blog.createdAt %> </i></small>
+                                                <p class="card-text mt-3">
+                                                    <%= blog.snippet %>
+                                                </p>
+                                                <a href="/blog/<%=blog.slug  %> " class="btn btn-primary float-end">Read more...</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <% }) } else { %>
+                                        <div class="alert alert-info w-100" role="alert">
+                                            <h1>No blog found...</h1>
+                                        </div>
+                                        <% } %>
+                        </div>
+            </div>
+        </main>
+
+        <%- include('./partials/footer.ejs') %>
+            <script>
+                function removeAlert() {
+                    document.getElementById("suc-delete").remove();
+                }
+            </script>
+    </body>
+
+</html>
